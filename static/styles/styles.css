@@ -8,4 +8,20 @@
   width: 300px;
   padding-left: 25px; }
 
+.channel-input {
+  width: 90%; }
+  .channel-input .add-button {
+    color: #069620;
+    background-color: white; }
+
+html, body {
+  height: 100%; }
+
+#user {
+  color: white; }
+
+.add-button:hover {
+  color: white;
+  background-color: #069620; }
+
 /*# sourceMappingURL=styles.css.map */

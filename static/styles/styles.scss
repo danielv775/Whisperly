@@ -1,3 +1,6 @@
+
+$primary-color: #069620;
+
 .color-message-test {
     background-color: green;
 }
@@ -9,4 +12,25 @@
 .col-channel-width {
     width: 300px;
     padding-left: 25px;
+}
+
+.channel-input {
+  width: 90%;
+  .add-button {
+    color: $primary-color;
+    background-color: white;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+#user {
+  color: white;
+}
+
+.add-button:hover {
+  color: white;
+  background-color: $primary-color;
 }
