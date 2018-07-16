@@ -29,14 +29,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set onsubmit attribute for adding channel
     document.querySelector('#add-channel-form').onsubmit = () => {
         const li = document.createElement('li');
-        li.innerHTML = document.querySelector('#channel').value;
+        const channel_name = document.querySelector('#channel').value;
+        li.innerHTML = channel_name;
         document.querySelector('#channels').append(li);
-
-        // send Asynch AJAX request to POST channel data to FLASK server
-        const request = new XMLHttpRequest();
 
         document.querySelector('#channel').value = '';
         document.querySelector('#submit-add-channel').disabled = true;
+
+        // send Asynch AJAX request to POST channel data to FLASK server
+        const request = new XMLHttpRequest();
+        request.open('POST', '/');
+
+        // Ensure response is OK, and sending data was succusful
+        request.onload = () => {
+            const data = JSON.parse(request.responseText);
+            if(data.success) {
+                console.log("Channel name sent to FLASK server");
+            }
+            else {
+                console.log("Channel data not recieved by FLASK server");
+            }
+        }
+
+        const data = new FormData();
+        data.append('channel_name', channel_name);
+        request.send(data);
 
         return false;
     };
