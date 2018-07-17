@@ -34,3 +34,14 @@ html, body {
   color: white;
   background-color: $primary-color;
 }
+
+ul {
+  list-style-type: none;
+  text-align: left;
+  margin-left: 0;
+  padding-left: 10px;
+  li {
+    color: white;
+    font-size: 120%;
+  }
+}

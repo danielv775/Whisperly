@@ -14,11 +14,12 @@ channel_list = []
 def index():
 
     if request.method == "GET":
-        return render_template("index.html")
+        # Pass channel list to, and use jinja to display already created channels
+        return render_template("index.html", channel_list=channel_list)
 
     elif request.method == "POST":
         channel = request.form.get("channel_name")
-        if channel:
+        if channel and (channel not in channel_list):
             channel_list.append(channel)
             print(channel_list)
             return jsonify({"success": True})

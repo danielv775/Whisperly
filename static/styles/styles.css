@@ -24,4 +24,13 @@ html, body {
   color: white;
   background-color: #069620; }
 
+ul {
+  list-style-type: none;
+  text-align: left;
+  margin-left: 0;
+  padding-left: 10px; }
+  ul li {
+    color: white;
+    font-size: 120%; }
+
 /*# sourceMappingURL=styles.css.map */

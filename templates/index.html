@@ -20,7 +20,9 @@
                     </div>
                 </form>
                 <ul id="channels">
-
+                    {% for channel in channel_list %}
+                        <li id="channel-option"># {{channel}}</li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col color-message-test">

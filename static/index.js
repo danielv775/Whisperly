@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
     var username = localStorage.getItem('display_name');
     document.querySelector('#user').innerHTML = username;
 
-    // Send AJAX request to GET all channels currently stored on the server
-
     // By default, you cannot add a channel
     document.querySelector('#submit-add-channel').disabled = true;
 
@@ -28,34 +26,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set onsubmit attribute for adding channel
     document.querySelector('#add-channel-form').onsubmit = () => {
-        const li = document.createElement('li');
         const channel_name = document.querySelector('#channel').value;
-        li.innerHTML = channel_name;
-        document.querySelector('#channels').append(li);
 
-        document.querySelector('#channel').value = '';
-        document.querySelector('#submit-add-channel').disabled = true;
+        let channels = [];
+        document.querySelectorAll('#channel-option').forEach(channel => {
+            channels.push(channel.innerHTML);
+        });
+        let channel_already_exists = (channels.indexOf(`# ${channel_name}`) > -1);
 
-        // send Asynch AJAX request to POST channel data to FLASK server
-        const request = new XMLHttpRequest();
-        request.open('POST', '/');
+        if(!channel_already_exists) {
+            const li = document.createElement('li');
+            li.innerHTML = `# ${channel_name}`;
+            document.querySelector('#channels').append(li);
 
-        // Ensure response is OK, and sending data was succusful
-        request.onload = () => {
-            const data = JSON.parse(request.responseText);
-            if(data.success) {
-                console.log("Channel name sent to FLASK server");
+            document.querySelector('#channel').value = '';
+            document.querySelector('#submit-add-channel').disabled = true;
+
+            // send Asynch AJAX request to POST channel data to FLASK server
+            const request = new XMLHttpRequest();
+            request.open('POST', '/');
+
+            // Ensure response is OK, and sending data was succusful
+            request.onload = () => {
+                const data = JSON.parse(request.responseText);
+                if(data.success) {
+                    console.log("Channel name sent to FLASK server");
+                }
+                else {
+                    console.log("Channel data not recieved by FLASK server");
+                }
             }
-            else {
-                console.log("Channel data not recieved by FLASK server");
-            }
+
+            const data = new FormData();
+            data.append('channel_name', channel_name);
+            request.send(data);
+
+            return false;
+
         }
-
-        const data = new FormData();
-        data.append('channel_name', channel_name);
-        request.send(data);
-
-        return false;
+        else {
+            document.querySelector('#channel').value = '';
+            document.querySelector('#submit-add-channel').disabled = true;
+            alert("Channel already exists");
+        }
     };
 
 
