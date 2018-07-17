@@ -21,7 +21,9 @@
                 </form>
                 <ul id="channels">
                     {% for channel in channel_list %}
-                        <li id="channel-option"># {{channel}}</li>
+                        <form id="switch-channel-form">
+                            <button id="submit-switch-channel" type="submit" value={{channel}}><li id="channel-option"># {{channel}}</li></button>
+                        </form>
                     {% endfor %}
                 </ul>
             </div>

@@ -33,4 +33,18 @@ ul {
     color: white;
     font-size: 120%; }
 
+#submit-switch-channel {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer; }
+
+#submit-switch-channel:hover {
+  background-color: #ffe53d; }
+
+#submit-switch-channel:active, #submit-switch-channel:focus {
+  outline: none; }
+
 /*# sourceMappingURL=styles.css.map */
