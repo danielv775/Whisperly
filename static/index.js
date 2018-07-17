@@ -8,7 +8,7 @@ if (!localStorage.getItem('display_name')) {
 document.addEventListener('DOMContentLoaded', () => {
 
     // Connect to a web-socket. Used for sending and recieving messages dynamically
-    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+    //var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     // Get existing display name from local storage and display on site
     var username = localStorage.getItem('display_name');
@@ -39,11 +39,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(!channel_already_exists) {
 
-            // Create form->button->li so that styles apply as soon as the channel is added
-            // rather than waiting for it to be pulled from server
+            // Create channel which is a form->button->li nested element
+            const form = document.createElement('form');
+            form.setAttribute('id', 'switch-channel-form');
+
+            const button = document.createElement('button');
+            button.setAttribute('id', 'submit-switch-channel');
+            button.setAttribute('type', 'submit');
+            button.setAttribute('value', channel_name);
+
             const li = document.createElement('li');
             li.innerHTML = `# ${channel_name}`;
-            document.querySelector('#channels').append(li);
+            li.setAttribute('id','channel-option');
+
+            button.appendChild(li);
+            form.appendChild(button);
+
+            document.querySelector('#channels').append(form);
 
             document.querySelector('#channel').value = '';
             document.querySelector('#submit-add-channel').disabled = true;
@@ -88,12 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Parse JSON response after request completes to ensure everything was OK
             request.onload = () => {
                 const data = JSON.parse(request.responseText);
+                console.log(data);
                 if(data.success) {
                     console.log("Channel to switch to send to FLASK server");
                 }
                 else {
                     console.log("Channel data not recieved by FLASK server");
                 }
+
             }
 
             const data = new FormData();

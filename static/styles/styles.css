@@ -14,6 +14,15 @@
     color: #069620;
     background-color: white; }
 
+.message-input {
+  width: 95%;
+  margin-top: 15px;
+  margin-left: auto;
+  margin-right: auto; }
+  .message-input .add-button {
+    color: #069620;
+    background-color: white; }
+
 html, body {
   height: 100%; }
 
@@ -46,5 +55,22 @@ ul {
 
 #submit-switch-channel:active, #submit-switch-channel:focus {
   outline: none; }
+
+.comment-container {
+  overflow-y: scroll;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  width: 95%;
+  height: 80%;
+  padding: 10px 10px 10px 10px; }
+  .comment-container .comment-item {
+    text-align: left; }
+    .comment-container .comment-item .comment-user {
+      font-size: 116%;
+      color: green; }
+    .comment-container .comment-item .comment-comment {
+      font-size: 70%;
+      color: green; }
 
 /*# sourceMappingURL=styles.css.map */

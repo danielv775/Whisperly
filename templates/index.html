@@ -29,11 +29,24 @@
             </div>
             <div class="col color-message-test">
                 <h1>Message View</h1>
-                <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </h2>
+                <div class="comment-container">
+                    <ul class="list-unstyled">
+                        <li class="media comment-item">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1 comment-user">dan</h5>
+                                <div class="comment-comment">my name is Dan</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <form id="message-form">
+                    <div class="input-group mb-3 message-input">
+                        <input type="text" class="form-control" placeholder="Enter message here" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-light add-button">Send</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
