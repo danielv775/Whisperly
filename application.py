@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 # list of all channels
-channel_list = {}
+channel_list = {"general": {} }
 
 @app.route("/", methods=["POST", "GET"])
 def index():
@@ -37,3 +37,11 @@ def index():
             return jsonify(channel_data)
         else:
             return jsonify({"success": False})
+
+@socketio.on("send message")
+def send_message(message_data):
+    channel = message_data["current_channel"]
+    del message_data["current_channel"]
+    channel_list[channel][message_data["timestamp"]] = [message_data["user"], message_data["message_content"]]
+    print(channel_list)
+    emit("recieve message", message_data, broadcast=True)

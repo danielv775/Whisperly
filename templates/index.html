@@ -30,20 +30,21 @@
             <div class="col color-message-test">
                 <h1>Message View</h1>
                 <div class="comment-container">
-                    <ul class="list-unstyled">
+                    <ul id="comment-list" class="list-unstyled">
                         <li class="media comment-item">
                             <div class="media-body">
                                 <h5 class="mt-0 mb-1 comment-user">dan</h5>
                                 <div class="comment-comment">my name is Dan</div>
+                                <div class="comment-comment">10:00 AM</div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <form id="message-form">
                     <div class="input-group mb-3 message-input">
-                        <input type="text" class="form-control" placeholder="Enter message here" aria-describedby="basic-addon2">
+                        <input id="message-input" type="text" class="form-control" placeholder="Enter message here" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button type="submit" class="btn btn-light add-button">Send</button>
+                            <button id="submit-send-message" type="submit" class="btn btn-light add-button">Send</button>
                         </div>
                     </div>
                 </form>
