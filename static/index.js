@@ -8,6 +8,7 @@ if (!localStorage.getItem('display_name')) {
 document.addEventListener('DOMContentLoaded', () => {
 
     var current_channel = 'general';
+    var comment_stack = 110;
 
     // Connect to a web-socket. Used for sending and recieving messages dynamically
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
            let user = username;
            let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
            console.log(message_data);
+           document.querySelector('#message-input').value = '';
            socket.emit('send message', message_data);
 
            return false;
@@ -35,7 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a message is broadcast to a channel, recieve the message, and add it to the message view
     socket.on('recieve message', message_data => {
         // Create a comment element and add to message view
-        console.log("Adding a comment");
 
         const li = document.createElement('li');
         li.setAttribute('class', 'media comment-item');
@@ -61,8 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         li.appendChild(div_media_body);
 
-        console.log(li);
         document.querySelector('#comment-list').append(li);
+        comment_stack -= 15;
+        document.querySelector('#comment-list').style.marginTop = `${comment_stack}%`;
+        console.log(document.querySelector('#comment-list').style.marginTop);
 
 
     });
