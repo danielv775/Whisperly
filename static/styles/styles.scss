@@ -75,7 +75,7 @@ ul {
 }
 
 .comment-container {
-    overflow-y: scroll;
+    overflow-y: auto;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
@@ -96,5 +96,5 @@ ul {
 }
 
 #comment-list {
-  margin-top: 110%;
+  padding-top: 110%;
 }

@@ -64,9 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelector('#comment-list').append(li);
         comment_stack -= 15;
-        document.querySelector('#comment-list').style.marginTop = `${comment_stack}%`;
-        console.log(document.querySelector('#comment-list').style.marginTop);
-
+        document.querySelector('#comment-list').style.paddingTop = `${comment_stack}%`;
+        li.scrollIntoView();
 
     });
 
