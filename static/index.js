@@ -4,6 +4,8 @@ if (!localStorage.getItem('display_name')) {
     localStorage.setItem('display_name', username);
 }
 
+const template = Handlebars.compile(document.querySelector('#load-messages').innerHTML);
+
 // Load current value of display_name
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
        document.querySelector('#submit-send-message').onclick = () => {
            let message_content = document.querySelector('#message-input').value
-           let timestamp = "Wednesday 10:56AM EST";
+           let timestamp = Date().toLocaleString();
            let user = username;
            let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
            console.log(message_data);
@@ -99,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
             form.setAttribute('id', 'switch-channel-form');
 
             const button = document.createElement('button');
-            button.setAttribute('id', 'submit-switch-channel');
+            //button.setAttribute('id', 'submit-switch-channel');
+            button.id = 'submit-switch-channel';
             button.setAttribute('type', 'submit');
             button.setAttribute('value', channel_name);
 
@@ -109,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             button.appendChild(li);
             form.appendChild(button);
-
+            console.log(form);
             document.querySelector('#channels').append(form);
 
             document.querySelector('#channel').value = '';
@@ -147,8 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('#submit-switch-channel').forEach(button => {
         button.onclick = function() {
-            //onsubmit??
+            console.log(this.value);
 
+            // Clear messages from current view when switching to next channel
+            if(this.value != current_channel) {
+                document.querySelector('#comment-list').innerHTML = '';
+                comment_stack = 110;
+            }
             // Send Asynch AJAX request to FLASK to tell server what channel was selected
             const request = new XMLHttpRequest();
             request.open('POST', '/');
@@ -159,13 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
             request.onload = () => {
                 const data = JSON.parse(request.responseText);
                 console.log(data);
-                if(data.success) {
-                    console.log("Channel to switch to sent to FLASK server");
+                for(var i = 0; i < data.length; i++) {
+                    const comment = template({'comment': data[i]});
+                    document.querySelector('#comment-list').innerHTML += comment;
                 }
-                else {
-                    console.log("Channel data not recieved by FLASK server");
-                }
-
             }
 
             current_channel =  this.value;

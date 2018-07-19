@@ -5,7 +5,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-        <script type"text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+        <script id="load-messages" type="text/template">
+            <li class="media comment-item">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1 comment-user">{% raw -%}{{comment.user}}{%- endraw %}</h5>
+                    <div class="comment-comment">{% raw -%}{{comment.message_content}}{%- endraw %}</div>
+                    <div class="comment-comment">{% raw -%}{{comment.timestamp}}{%- endraw %}</div>
+                </div>
+            </li>
+        </script>
+        <script type="text/javascript" src="{{ url_for('static', filename='index.js') }}"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styles.css', version='79') }}">
         <link href="https://fonts.googleapis.com/css?family=PT+Sans+Caption|Lobster" rel="stylesheet">

@@ -9,7 +9,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 # list of all channels
-channel_list = {"general": {} }
+channel_list = {"general": [] }
 
 @app.route("/", methods=["POST", "GET"])
 def index():
@@ -23,7 +23,7 @@ def index():
 
         # Adding a new channel
         if channel and (channel not in channel_list):
-            channel_list[channel] = {}
+            channel_list[channel] = []
             print(channel_list)
             return jsonify({"success": True})
         # Switching to a different channel
@@ -33,7 +33,6 @@ def index():
             print(f"Switch to {channel}")
 
             channel_data = channel_list[channel]
-            channel_data["success"] = True
             return jsonify(channel_data)
         else:
             return jsonify({"success": False})
@@ -42,6 +41,5 @@ def index():
 def send_message(message_data):
     channel = message_data["current_channel"]
     del message_data["current_channel"]
-    channel_list[channel][message_data["timestamp"]] = [message_data["user"], message_data["message_content"]]
-    print(channel_list)
+    channel_list[channel].append(message_data)
     emit("recieve message", message_data, broadcast=True)
