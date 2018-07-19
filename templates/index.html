@@ -31,6 +31,15 @@
                 <h1>Message View</h1>
                 <div class="comment-container">
                     <ul id="comment-list" class="list-unstyled">
+                        {% for item in channel_data %}
+                        <li class="media comment-item">
+                            <div class="media-body">
+                                <h5 class="mt-0 mb-1 comment-user">{{item.user}}</h5>
+                                <div class="comment-comment">{{item.message_content}}</div>
+                                <div class="comment-comment">{{item.timestamp}}</div>
+                            </div>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <form id="message-form">
