@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block heading %}
-    <h1>Chat-Chat</h1>
 {% endblock %}
 
 {% block body %}
@@ -10,12 +9,12 @@
         <div class="row flex-nowrap h-100">
             <div class="col-channel-width color-channel-test">
                 <h4 id="user"></h4>
-                <h1>Channels</h1>
+                <h1 id="channel-heading">Channels</h1>
                 <form id="add-channel-form">
                     <div class="input-group mb-3 channel-input">
                         <input id="channel" type="text" class="form-control" placeholder="New channel name" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button id="submit-add-channel" type="submit" class="btn btn-light add-button">Add</button>
+                            <button id="submit-add-channel" type="submit" class="btn btn-light add-button"><div id="plus">+</div></button>
                         </div>
                     </div>
                 </form>
@@ -28,15 +27,15 @@
                 </ul>
             </div>
             <div class="col color-message-test">
-                <h1>Message View</h1>
+                <h1 id="current_channel">Current Channel</h1>
                 <div class="comment-container">
                     <ul id="comment-list" class="list-unstyled">
                         {% for item in channel_data %}
                         <li class="media comment-item">
-                            <div class="media-body">
-                                <h5 class="mt-0 mb-1 comment-user">{{item.user}}</h5>
+                            <div class="media-body comment-media">
+                                <h5 class="mt-0 mb-1 comment-user">{{item.user}} &middot</h5>
+                                <div id="time" class="comment-comment">{{item.timestamp}}</div>
                                 <div class="comment-comment">{{item.message_content}}</div>
-                                <div class="comment-comment">{{item.timestamp}}</div>
                             </div>
                         </li>
                         {% endfor %}
@@ -46,7 +45,7 @@
                     <div class="input-group mb-3 message-input">
                         <input id="message-input" type="text" class="form-control" placeholder="Enter message here" aria-describedby="basic-addon2">
                         <div class="input-group-append">
-                            <button id="submit-send-message" type="submit" class="btn btn-light add-button">Send</button>
+                            <button id="submit-send-message" type="submit" class="btn btn-light add-button"><div id="send">Send</div></button>
                         </div>
                     </div>
                 </form>

@@ -1,8 +1,16 @@
 .color-message-test {
-  background-color: green; }
+  background-color: white; }
 
 .color-channel-test {
-  background-color: purple; }
+  background-color: #c90016; }
+
+.comment-media:hover {
+  background-color: #F9F9F9; }
+
+#current_channel {
+  margin-left: 30px;
+  margin-top: 10px;
+  font-family: "Carter One", sans-serif; }
 
 .col-channel-width {
   width: 300px;
@@ -11,8 +19,8 @@
 .channel-input {
   width: 90%; }
   .channel-input .add-button {
-    color: #069620;
-    background-color: white; }
+    color: white;
+    background-color: #ff8800; }
 
 .message-input {
   width: 95%;
@@ -20,18 +28,30 @@
   margin-left: auto;
   margin-right: auto; }
   .message-input .add-button {
-    color: #069620;
-    background-color: white; }
+    color: white;
+    background-color: orange; }
 
 html, body {
-  height: 100%; }
+  height: 100%;
+  overflow-y: hidden; }
 
 #user {
-  color: white; }
+  color: white;
+  margin-top: 15px;
+  margin-left: 3px;
+  font-family: "Carter One", sans-serif; }
+
+#channel-heading {
+  color: white;
+  font-family: "Carter One", sans-serif; }
+
+#channel-option {
+  font-family: "Carter One", sans-serif;
+  font-size: 150%; }
 
 .add-button:hover {
-  color: white;
-  background-color: #069620; }
+  color: #ff8800;
+  background-color: white; }
 
 ul {
   list-style-type: none;
@@ -42,6 +62,20 @@ ul {
     color: white;
     font-size: 120%; }
 
+#plus {
+  font-family: "Carter One", sans-serif;
+  font-size: 150%; }
+
+#send {
+  font-family: "Carter One", sans-serif;
+  font-size: 120%; }
+
+#switch-channel-form:hover {
+  background-color: orange;
+  /*#channel-option {
+    color: $crimson;
+  }*/ }
+
 #submit-switch-channel {
   background: none;
   color: inherit;
@@ -50,13 +84,14 @@ ul {
   font: inherit;
   cursor: pointer; }
 
-#submit-switch-channel:hover {
-  background-color: #ffe53d; }
+h5, #time {
+  display: inline; }
 
 #submit-switch-channel:active, #submit-switch-channel:focus {
   outline: none; }
 
 .comment-container {
+  margin-top: 15px;
   overflow-y: auto;
   margin-left: auto;
   margin-right: auto;
@@ -68,10 +103,12 @@ ul {
     text-align: left; }
     .comment-container .comment-item .comment-user {
       font-size: 116%;
-      color: green; }
+      color: black;
+      font-family: "PT Sans Caption", sans-serif; }
     .comment-container .comment-item .comment-comment {
       font-size: 70%;
-      color: green; }
+      color: black;
+      font-family: "PT Sans Caption", sans-serif; }
 
 /*
 #comment-list {

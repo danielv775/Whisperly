@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
        document.querySelector('#submit-send-message').onclick = () => {
            let message_content = document.querySelector('#message-input').value
-           let timestamp = Date().toLocaleString();
+           let timestamp = new Date();
+           timestamp = timestamp.toLocaleString('en-US');
            let user = username;
            let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": localStorage.getItem('current_channel') };
            console.log(message_data);
@@ -52,23 +53,26 @@ document.addEventListener('DOMContentLoaded', () => {
         li.setAttribute('class', 'media comment-item');
 
         const div_media_body = document.createElement('div');
-        div_media_body.setAttribute('class', 'media-body');
+        div_media_body.setAttribute('class', 'media-body comment-media');
 
         const h5 = document.createElement('h5');
         h5.setAttribute('class', 'mt-0 mb-1 comment-user');
-        h5.innerHTML = message_data["user"];
+        let midpt = '&middot';
+        let space = '\u0020';
+        h5.innerHTML = `${message_data["user"]}${space}${midpt}${space}`;
+
+        const div_time = document.createElement('div');
+        div_time.setAttribute('class', 'comment-comment');
+        div_time.setAttribute('id', 'time');
+        div_time.innerHTML = message_data["timestamp"];
 
         const div_comment = document.createElement('div');
         div_comment.setAttribute('class', 'comment-comment');
         div_comment.innerHTML = message_data["message_content"];
 
-        const div_time = document.createElement('div');
-        div_time.setAttribute('class', 'comment-comment');
-        div_time.innerHTML = message_data["timestamp"];
-
         div_media_body.appendChild(h5);
-        div_media_body.appendChild(div_comment);
         div_media_body.appendChild(div_time);
+        div_media_body.appendChild(div_comment);
 
         li.appendChild(div_media_body);
 

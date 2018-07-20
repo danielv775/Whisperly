@@ -22,6 +22,7 @@ def index():
 
     elif request.method == "POST":
         channel = request.form.get("channel_name")
+        user = request.form.get("username")
 
         # Adding a new channel
         if channel and (channel not in channel_list):
