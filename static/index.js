@@ -69,12 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('current_channel', switching_channel);
                     document.querySelector('#comment-list').innerHTML = '';
 
-                    var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-                    if( !(switching_channel in comment_stack) ) {
-                        comment_stack[switching_channel] = 110;
-                        localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
-                    }
-
                     // Send Asynch AJAX request to FLASK to tell server what channel was selected
                     const request = new XMLHttpRequest();
                     request.open('POST', '/');
@@ -183,14 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#add-channel-form').onsubmit = () => {
         const channel_name = document.querySelector('#channel').value;
 
-        let channels = [];
-        document.querySelectorAll('#channel-option').forEach(channel => {
-            channels.push(channel.innerHTML);
-        });
-        let channel_already_exists = (channels.indexOf(`# ${channel_name}`) > -1);
-
-        if(!channel_already_exists) {
-
+        var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+        if( !(channel_name in comment_stack) ) {
+            comment_stack[channel_name] = 110;
+            localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
             // Create channel which is a form->button->li nested element
             const form = document.createElement('form');
             form.setAttribute('id', 'switch-channel-form');
@@ -242,63 +232,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return false;
         }
     };
-
-    /*
-    document.querySelectorAll('#submit-switch-channel').forEach(button => {
-        button.onclick = function() {
-            console.log(this.value);
-
-            // Clear messages from current view when switching to next channel
-            var room_to_leave = localStorage.getItem('current_channel')
-            if(this.value != room_to_leave) {
-                var switching_channel = this.value;
-                var current_user = localStorage.getItem('display_name');
-
-                localStorage.setItem('current_channel', switching_channel);
-                document.querySelector('#comment-list').innerHTML = '';
-
-                var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-                if( !(switching_channel in comment_stack) ) {
-                    comment_stack[switching_channel] = 110;
-                    localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
-                }
-
-                // Send Asynch AJAX request to FLASK to tell server what channel was selected
-                const request = new XMLHttpRequest();
-                request.open('POST', '/');
-
-                // Parse JSON response for unique channel data
-                // i.e. past 100 messages, where each message has a timestamp, displayname, and text content
-                // Use JS to render the data into the message view without reloading the page
-                request.onload = () => {
-                    const data = JSON.parse(request.responseText);
-                    console.log(data);
-                    for(var i = 0; i < data.length; i++) {
-                        const comment = template({'comment': data[i]});
-                        document.querySelector('#comment-list').innerHTML += comment;
-                    }
-                    document.querySelector('#comment-list').style.paddingTop = `${comment_stack[switching_channel]}%`;
-                    var comment_count = document.querySelector('#comment-list').childElementCount;
-                    if (comment_count > 0) {
-                        document.querySelector('#comment-list').lastElementChild.scrollIntoView();
-                    }
-                }
-
-                const data = new FormData();
-                data.append('channel_name', localStorage.getItem('current_channel'));
-                document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
-                request.send(data);
-
-                return false;
-
-            }
-            else {
-                return false;
-            }
-        };
-    });
-    */
-
 
 });
 

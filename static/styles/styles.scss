@@ -5,6 +5,14 @@ $orange: #ff8800;
 $font-stack: 'Carter One', sans-serif;
 $font-stack-comment: 'PT Sans Caption', sans-serif;
 
+/*
+@media (max-width: 768px) {
+  html {
+    resize: none;
+  }
+}
+*/
+
 .app-area {
   height: 100%;
 }
