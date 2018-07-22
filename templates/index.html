@@ -25,19 +25,9 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col color-message-test">
-                <h1 id="channel-title">{{present_channel}}</h1>
+            <div id="message-view" class="col color-message-test">
                 <div class="comment-container">
                     <ul id="comment-list" class="list-unstyled">
-                        {% for item in channel_data %}
-                        <li class="media comment-item">
-                            <div class="media-body comment-media">
-                                <h5 class="mt-0 mb-1 comment-user">{{item.user}} &middot</h5>
-                                <div id="time" class="comment-comment">{{item.timestamp}}</div>
-                                <div class="comment-comment">{{item.message_content}}</div>
-                            </div>
-                        </li>
-                        {% endfor %}
                     </ul>
                 </div>
                 <form id="message-form">

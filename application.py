@@ -10,15 +10,14 @@ socketio = SocketIO(app)
 
 # Channel Data Global Variables
 channel_list = {"general": [] }
-present_channel = "general"
+present_channel = {"initial":"general"}
 
 @app.route("/", methods=["POST", "GET"])
 def index():
 
     if request.method == "GET":
         # Pass channel list to, and use jinja to display already created channels
-        global present_channel
-        return render_template("index.html", channel_list=channel_list, channel_data=channel_list[present_channel], present_channel=present_channel)
+        return render_template("index.html", channel_list=channel_list)
 
     elif request.method == "POST":
         channel = request.form.get("channel_name")
@@ -31,10 +30,10 @@ def index():
         # Switching to a different channel
         elif channel in channel_list:
             # send channel specific data to client i.e. messages, who sent them, and when they were sent
-            # send via JSON response and then render with JS, or render_template??
+            # send via JSON response and then render with JS
             print(f"Switch to {channel}")
-            present_channel = channel
-            channel_data = channel_list[channel]
+            present_channel[user] = channel
+            channel_data = channel_list[present_channel[user]]
             return jsonify(channel_data)
         else:
             return jsonify({"success": False})

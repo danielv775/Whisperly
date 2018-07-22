@@ -8,6 +8,7 @@ if (!localStorage.getItem('display_name') && !localStorage.getItem('current_chan
 
 
 const template = Handlebars.compile(document.querySelector('#load-messages').innerHTML);
+const template_title = Handlebars.compile(document.querySelector('#load-channel-title').innerHTML);
 
 // Load current value of display_name
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,14 +25,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Send back JSON with proper channel data for that user
     // Use JS template to add channel data to channel like is done in switch right now
     // Get rid of Jinja template channel data on refresh
+    var current_channel = localStorage.getItem('current_channel');
+    const channel_to_display = template_title({'channel_to_display': current_channel});
+    var channel_element = channel_to_display, parser = new DOMParser(), doc = parser.parseFromString(channel_element, 'text/xml');
+    document.querySelector('#message-view').prepend(doc.querySelector('#channel-title'));
 
-    let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-    let current_channel = localStorage.getItem('current_channel');
-    document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
-    var comment_count = document.querySelector('#comment-list').childElementCount;
-    if (comment_count > 0) {
-        document.querySelector('#comment-list').lastElementChild.scrollIntoView();
+    const request = new XMLHttpRequest();
+    request.open('POST', '/');
+    request.onload = () => {
+        const data = JSON.parse(request.responseText);
+        console.log(data);
+        for(var i = 0; i < data.length; i++) {
+            const comment = template({'comment': data[i]});
+            document.querySelector('#comment-list').innerHTML += comment;
+        }
+        let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+        var comment_count = document.querySelector('#comment-list').childElementCount;
+        if (comment_count > 0) {
+            document.querySelector('#comment-list').lastElementChild.scrollIntoView();
+        }
+
     }
+    const data = new FormData();
+    data.append('username', username);
+    data.append('channel_name', current_channel);
+    request.send(data);
+
+    //let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+    //document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+    //var comment_count = document.querySelector('#comment-list').childElementCount;
+    //if (comment_count > 0) {
+    //    document.querySelector('#comment-list').lastElementChild.scrollIntoView();
+    //}
 
     // When connected to socket, configure send message button, and emit message_data to FLASK server
     socket.on('connect', () => {
