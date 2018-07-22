@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, jsonify
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import json
 
 app = Flask(__name__)
@@ -43,4 +43,18 @@ def send_message(message_data):
     channel = message_data["current_channel"]
     del message_data["current_channel"]
     channel_list[channel].append(message_data)
-    emit("recieve message", message_data, broadcast=True)
+    emit("recieve message", message_data, broadcast=True, room=channel)
+
+
+@socketio.on("leave")
+def on_leave(room_to_leave):
+    print("leaving room")
+    leave_room(room_to_leave)
+    emit("leave channel ack", room=room_to_leave)
+
+
+@socketio.on("join")
+def on_join(room_to_join):
+    print("joining room")
+    join_room(room_to_join)
+    emit("join channel ack", room=room_to_join)

@@ -20,16 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     var username = localStorage.getItem('display_name');
     document.querySelector('#user').innerHTML = username;
 
-    // Send AJAX POST with username data to FLASK
-    // Keep track of user:channel pairs on server
-    // Send back JSON with proper channel data for that user
-    // Use JS template to add channel data to channel like is done in switch right now
-    // Get rid of Jinja template channel data on refresh
     var current_channel = localStorage.getItem('current_channel');
     const channel_to_display = template_title({'channel_to_display': current_channel});
     var channel_element = channel_to_display, parser = new DOMParser(), doc = parser.parseFromString(channel_element, 'text/xml');
     document.querySelector('#message-view').prepend(doc.querySelector('#channel-title'));
 
+    // Send AJAX POST with username data to FLASK
+    // Keep track of user:channel pairs on server
+    // Send back JSON with proper channel data for that user
     const request = new XMLHttpRequest();
     request.open('POST', '/');
     request.onload = () => {
@@ -52,15 +50,65 @@ document.addEventListener('DOMContentLoaded', () => {
     data.append('channel_name', current_channel);
     request.send(data);
 
-    //let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-    //document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
-    //var comment_count = document.querySelector('#comment-list').childElementCount;
-    //if (comment_count > 0) {
-    //    document.querySelector('#comment-list').lastElementChild.scrollIntoView();
-    //}
-
     // When connected to socket, configure send message button, and emit message_data to FLASK server
     socket.on('connect', () => {
+       socket.emit('join', current_channel);
+
+       document.querySelectorAll('#submit-switch-channel').forEach(button => {
+            button.onclick = function() {
+                console.log(this.value);
+
+                // Clear messages from current view when switching to next channel
+                var room_to_leave = localStorage.getItem('current_channel')
+                if(this.value != room_to_leave) {
+                    var switching_channel = this.value;
+                    var current_user = localStorage.getItem('display_name');
+                    socket.emit('join', switching_channel);
+                    socket.emit('leave', room_to_leave);
+
+                    localStorage.setItem('current_channel', switching_channel);
+                    document.querySelector('#comment-list').innerHTML = '';
+
+                    var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+                    if( !(switching_channel in comment_stack) ) {
+                        comment_stack[switching_channel] = 110;
+                        localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
+                    }
+
+                    // Send Asynch AJAX request to FLASK to tell server what channel was selected
+                    const request = new XMLHttpRequest();
+                    request.open('POST', '/');
+
+                    // Parse JSON response for unique channel data
+                    // i.e. past 100 messages, where each message has a timestamp, displayname, and text content
+                    // Use JS to render the data into the message view without reloading the page
+                    request.onload = () => {
+                        const data = JSON.parse(request.responseText);
+                        console.log(data);
+                        for(var i = 0; i < data.length; i++) {
+                            const comment = template({'comment': data[i]});
+                            document.querySelector('#comment-list').innerHTML += comment;
+                        }
+                        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[switching_channel]}%`;
+                        var comment_count = document.querySelector('#comment-list').childElementCount;
+                        if (comment_count > 0) {
+                            document.querySelector('#comment-list').lastElementChild.scrollIntoView();
+                        }
+                    }
+
+                    const data = new FormData();
+                    data.append('channel_name', localStorage.getItem('current_channel'));
+                    document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
+                    request.send(data);
+
+                    return false;
+
+                }
+                else {
+                    return false;
+                }
+            };
+        });
 
        document.querySelector('#submit-send-message').onclick = () => {
            let message_content = document.querySelector('#message-input').value
@@ -195,13 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    /*
     document.querySelectorAll('#submit-switch-channel').forEach(button => {
         button.onclick = function() {
             console.log(this.value);
 
             // Clear messages from current view when switching to next channel
-            if(this.value != localStorage.getItem('current_channel')) {
+            var room_to_leave = localStorage.getItem('current_channel')
+            if(this.value != room_to_leave) {
                 var switching_channel = this.value;
+                var current_user = localStorage.getItem('display_name');
+
                 localStorage.setItem('current_channel', switching_channel);
                 document.querySelector('#comment-list').innerHTML = '';
 
@@ -210,12 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     comment_stack[switching_channel] = 110;
                     localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
                 }
-                /*
-                else {
-                    document.querySelector('#comment-list').style.paddingTop = `${comment_stack[switching_channel]}%`;
-                    console.log(document.querySelector('#comment-list').lastElementChild);
-                }
-                */
 
                 // Send Asynch AJAX request to FLASK to tell server what channel was selected
                 const request = new XMLHttpRequest();
@@ -251,6 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
     });
+    */
 
 
 });
