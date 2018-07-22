@@ -18,7 +18,7 @@ def index():
     if request.method == "GET":
         # Pass channel list to, and use jinja to display already created channels
         global present_channel
-        return render_template("index.html", channel_list=channel_list, channel_data=channel_list[present_channel])
+        return render_template("index.html", channel_list=channel_list, channel_data=channel_list[present_channel], present_channel=present_channel)
 
     elif request.method == "POST":
         channel = request.form.get("channel_name")

@@ -19,6 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
     var username = localStorage.getItem('display_name');
     document.querySelector('#user').innerHTML = username;
 
+    // Send AJAX POST with username data to FLASK
+    // Keep track of user:channel pairs on server
+    // Send back JSON with proper channel data for that user
+    // Use JS template to add channel data to channel like is done in switch right now
+    // Get rid of Jinja template channel data on refresh
+
     let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
     let current_channel = localStorage.getItem('current_channel');
     document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
@@ -79,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#comment-list').append(li);
         let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
         let current_channel = localStorage.getItem('current_channel');
-        comment_stack[current_channel] -= 15;
+        comment_stack[current_channel] -= 10;
         localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
         document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
         li.scrollIntoView();
@@ -208,6 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const data = new FormData();
                 data.append('channel_name', localStorage.getItem('current_channel'));
+                document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
                 request.send(data);
 
                 return false;

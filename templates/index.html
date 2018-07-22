@@ -5,8 +5,7 @@
 
 {% block body %}
     <body>
-
-        <div class="row flex-nowrap h-100">
+        <div class="row flex-nowrap app-area">
             <div class="col-channel-width color-channel-test">
                 <h4 id="user"></h4>
                 <h1 id="channel-heading">Channels</h1>
@@ -27,7 +26,7 @@
                 </ul>
             </div>
             <div class="col color-message-test">
-                <h1 id="current_channel">Current Channel</h1>
+                <h1 id="channel-title">{{present_channel}}</h1>
                 <div class="comment-container">
                     <ul id="comment-list" class="list-unstyled">
                         {% for item in channel_data %}
@@ -51,7 +50,6 @@
                 </form>
             </div>
         </div>
-
 
     </body>
 {% endblock %}

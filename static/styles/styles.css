@@ -1,3 +1,6 @@
+.app-area {
+  height: 100%; }
+
 .color-message-test {
   background-color: white; }
 
@@ -7,9 +10,9 @@
 .comment-media:hover {
   background-color: #F9F9F9; }
 
-#current_channel {
+#channel-title {
   margin-left: 30px;
-  margin-top: 10px;
+  margin-top: 15px;
   font-family: "Carter One", sans-serif; }
 
 .col-channel-width {
@@ -24,20 +27,22 @@
 
 .message-input {
   width: 95%;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-left: auto;
-  margin-right: auto; }
+  margin-right: auto;
+  margin-bottom: 15px; }
   .message-input .add-button {
     color: white;
     background-color: orange; }
 
 html, body {
   height: 100%;
-  overflow-y: hidden; }
+  overflow-y: hidden;
+  background-color: #ff8800; }
 
 #user {
   color: white;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: 3px;
   font-family: "Carter One", sans-serif; }
 
@@ -97,7 +102,7 @@ h5, #time {
   margin-right: auto;
   background-color: white;
   width: 95%;
-  height: 80%;
+  height: 75%;
   padding: 10px 10px 10px 10px; }
   .comment-container .comment-item {
     text-align: left; }
@@ -112,7 +117,7 @@ h5, #time {
 
 /*
 #comment-list {
-  padding-top: 110%;
+  padding-top: 100%;
 }
 */
 

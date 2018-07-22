@@ -5,6 +5,10 @@ $orange: #ff8800;
 $font-stack: 'Carter One', sans-serif;
 $font-stack-comment: 'PT Sans Caption', sans-serif;
 
+.app-area {
+  height: 100%;
+}
+
 .color-message-test {
     background-color: white;
 }
@@ -17,9 +21,9 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
   background-color: #F9F9F9;
 }
 
-#current_channel {
+#channel-title {
   margin-left: 30px;
-  margin-top: 10px;
+  margin-top: 15px;
   font-family: $font-stack;
 }
 
@@ -38,9 +42,10 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
 
 .message-input {
   width: 95%;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 15px;
   .add-button {
     color: white;
     background-color: orange;
@@ -50,11 +55,12 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
 html, body {
   height: 100%;
   overflow-y: hidden;
+  background-color: $orange;
 }
 
 #user {
   color: white;
-  margin-top: 15px;
+  margin-top: 20px;
   margin-left: 3px;
   font-family: $font-stack;
 }
@@ -126,7 +132,7 @@ h5, #time {
     margin-right: auto;
     background-color: white;
     width: 95%;
-    height: 80%;
+    height: 75%;
     padding: 10px 10px 10px 10px;
     .comment-item {
         text-align: left;
@@ -145,6 +151,6 @@ h5, #time {
 
 /*
 #comment-list {
-  padding-top: 110%;
+  padding-top: 100%;
 }
 */
