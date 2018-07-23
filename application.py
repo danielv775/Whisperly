@@ -58,7 +58,7 @@ def delete_channel(message_data):
     del message_data["current_channel"]
     del channel_list[channel]
     channel_list["general"].append(message_data)
-    message_data = channel_list["general"]
+    message_data = {"data": channel_list["general"], "deleted_channel": channel}
     emit("announce channel deletion", message_data, broadcast=True)
 
 @socketio.on("leave")

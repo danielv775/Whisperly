@@ -44,6 +44,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return false;
     }
 
+    function channel_switch() {
+        /* Assign this function to button.onclick attribute. It the wrapper function for switching rooms.
+        */
+
+        console.log(this.value);
+
+        // Clear messages from current view when switching to next channel
+        var room_to_leave = localStorage.getItem('current_channel');
+        if(this.value != room_to_leave) {
+            var current_channel = this.value;
+            var current_user = localStorage.getItem('display_name');
+            socket.emit('join', current_channel);
+            socket.emit('leave', room_to_leave);
+
+            localStorage.setItem('current_channel', current_channel);
+            document.querySelector('#comment-list').innerHTML = '';
+
+            // Generate message view with data from server for user switching to a new channel
+            const request = new XMLHttpRequest();
+            request.open('POST', '/');
+            request.onload = asynch_load_messages.bind(null, request);
+            const data = new FormData();
+            data.append('channel_name', localStorage.getItem('current_channel'));
+            document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
+            request.send(data);
+            return false;
+
+        }
+        else {
+            return false;
+        }
+    }
+
     // Generate message view for user with data from server
     const request = new XMLHttpRequest();
     request.open('POST', '/');
@@ -58,35 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
        socket.emit('join', current_channel);
 
        document.querySelectorAll('#submit-switch-channel').forEach(button => {
-            button.onclick = function() {
-                console.log(this.value);
-
-                // Clear messages from current view when switching to next channel
-                var room_to_leave = localStorage.getItem('current_channel');
-                if(this.value != room_to_leave) {
-                    var current_channel = this.value;
-                    var current_user = localStorage.getItem('display_name');
-                    socket.emit('join', current_channel);
-                    socket.emit('leave', room_to_leave);
-
-                    localStorage.setItem('current_channel', current_channel);
-                    document.querySelector('#comment-list').innerHTML = '';
-
-                    // Generate message view with data from server for user switching to a new channel
-                    const request = new XMLHttpRequest();
-                    request.open('POST', '/');
-                    request.onload = asynch_load_messages.bind(null, request);
-                    const data = new FormData();
-                    data.append('channel_name', localStorage.getItem('current_channel'));
-                    document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
-                    request.send(data);
-                    return false;
-
-                }
-                else {
-                    return false;
-                }
-            };
+            button.onclick = channel_switch;
         });
 
        document.querySelector('#submit-send-message').onclick = () => {
@@ -102,8 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
            /* Superuser can delete a channel */
            if( (user == 'superuser') && (message_content == delete_channel) && (current_channel != 'general') )
            {
-               socket.emit('join', 'general');
-               socket.emit('leave', current_channel);
+               //socket.emit('join', 'general');
+               //socket.emit('leave', current_channel);
                user = "mod";
                message_content = `mod has deleted channel ${current_channel}`;
                let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
@@ -173,7 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     socket.on('announce channel deletion', message_data => {
-        var deleted_channel = localStorage.getItem('current_channel');
+        var deleted_channel = message_data["deleted_channel"];
+        message_data = message_data["data"];
+        socket.emit('join', 'general');
+        socket.emit('leave', deleted_channel);
+
         localStorage.setItem('current_channel', 'general');
         document.querySelector('#comment-list').innerHTML = '';
         document.querySelector('#channel-title').remove();
@@ -233,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.id = 'submit-switch-channel';
             button.setAttribute('type', 'submit');
             button.setAttribute('value', channel_name);
+            button.setAttribute('onclick', channel_switch);
 
             const li = document.createElement('li');
             li.innerHTML = `# ${channel_name}`;
