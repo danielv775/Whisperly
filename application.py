@@ -41,8 +41,13 @@ def index():
 @socketio.on("send message")
 def send_message(message_data):
     channel = message_data["current_channel"]
+    channel_message_count = len(channel_list[channel])
     del message_data["current_channel"]
     channel_list[channel].append(message_data)
+    message_data["deleted_message"] = False
+    if(channel_message_count >= 100):
+        del channel_list[channel][0]
+        message_data["deleted_message"] = True
     emit("recieve message", message_data, broadcast=True, room=channel)
 
 

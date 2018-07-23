@@ -1,17 +1,12 @@
 
-$primary-color: #069620;
+$primary-color: #161C2F;
+$secondary-color: #8A93B1;
 $crimson: #c90016;
 $orange: #ff8800;
-$font-stack: 'Carter One', sans-serif;
-$font-stack-comment: 'PT Sans Caption', sans-serif;
+/*$font-stack: 'Carter One', sans-serif;*/
+$font-stack: 'Josefin Sans', sans-serif;
+$font-stack-comment: 'Josefin Sans', sans-serif;
 
-/*
-@media (max-width: 768px) {
-  html {
-    resize: none;
-  }
-}
-*/
 
 .app-area {
   height: 100%;
@@ -22,7 +17,7 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
 }
 
 .color-channel-test {
-    background-color: $crimson;
+    background-color: $primary-color;
 }
 
 .comment-media:hover {
@@ -31,8 +26,11 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
 
 #channel-title {
   margin-left: 30px;
-  margin-top: 15px;
   font-family: $font-stack;
+}
+
+#message-view {
+  margin-top: 10px;
 }
 
 .col-channel-width {
@@ -43,8 +41,8 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
 .channel-input {
   width: 90%;
   .add-button {
-    color: white;
-    background-color: $orange;
+    color: $secondary-color;
+    background-color: $primary-color;
   }
 }
 
@@ -55,26 +53,26 @@ $font-stack-comment: 'PT Sans Caption', sans-serif;
   margin-right: auto;
   margin-bottom: 15px;
   .add-button {
-    color: white;
-    background-color: orange;
+    color: $secondary-color;
+    background-color: $primary-color;
   }
 }
 
 html, body {
   height: 100%;
   overflow-y: hidden;
-  background-color: $orange;
+  overflow-x: hidden;
 }
 
 #user {
-  color: white;
+  color: $secondary-color;
   margin-top: 20px;
   margin-left: 3px;
   font-family: $font-stack;
 }
 
 #channel-heading {
-  color: white;
+  color: $secondary-color;
   font-family: $font-stack;
 }
 
@@ -84,17 +82,17 @@ html, body {
 }
 
 .add-button:hover {
-  color: $orange;
-  background-color: white;
+  color: $primary-color;
+  background-color: $secondary-color;
 }
 
 ul {
   list-style-type: none;
   text-align: left;
   margin-left: 0;
-  padding-left: 10px;
+  padding-left: 0;
   li {
-    color: white;
+    color: $secondary-color;
     font-size: 120%;
   }
 }
@@ -110,10 +108,10 @@ ul {
 }
 
 #switch-channel-form:hover {
-  background-color: orange;
-  /*#channel-option {
-    color: $crimson;
-  }*/
+  background-color: $secondary-color;
+  #channel-option {
+    color: $primary-color;
+  }
 }
 
 #submit-switch-channel {
@@ -135,22 +133,27 @@ h5, #time {
 
 .comment-container {
     margin-top: 15px;
-    overflow-y: auto;
+    overflow-y: scroll;
     margin-left: auto;
     margin-right: auto;
     background-color: white;
-    width: 95%;
+    width: 105%;
     height: 80%;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 10px 10px 33px;
     .comment-item {
         text-align: left;
         .comment-user {
-            font-size: 116%;
+            font-size: 131%;
             color: black;
             font-family: $font-stack-comment;
         }
         .comment-comment {
-            font-size: 70%;
+            font-size: 79%;
+            color: black;
+            font-family: $font-stack-comment;
+        }
+        .comment-time {
+            font-size: 79%;
             color: black;
             font-family: $font-stack-comment;
         }

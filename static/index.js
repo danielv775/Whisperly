@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(this.value);
 
                 // Clear messages from current view when switching to next channel
-                var room_to_leave = localStorage.getItem('current_channel')
+                var room_to_leave = localStorage.getItem('current_channel');
                 if(this.value != room_to_leave) {
                     var switching_channel = this.value;
                     var current_user = localStorage.getItem('display_name');
@@ -83,11 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             const comment = template({'comment': data[i]});
                             document.querySelector('#comment-list').innerHTML += comment;
                         }
+                        let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
                         document.querySelector('#comment-list').style.paddingTop = `${comment_stack[switching_channel]}%`;
                         var comment_count = document.querySelector('#comment-list').childElementCount;
                         if (comment_count > 0) {
                             document.querySelector('#comment-list').lastElementChild.scrollIntoView();
                         }
+                        return false;
                     }
 
                     const data = new FormData();
@@ -122,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a message is broadcast to a channel, recieve the message, and add it to the message view
     socket.on('recieve message', message_data => {
         // Create a comment element and add to message view
+        console.log(message_data["deleted_message"]);
 
         const li = document.createElement('li');
         li.setAttribute('class', 'media comment-item');
@@ -136,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         h5.innerHTML = `${message_data["user"]}${space}${midpt}${space}`;
 
         const div_time = document.createElement('div');
-        div_time.setAttribute('class', 'comment-comment');
+        div_time.setAttribute('class', 'comment-time');
         div_time.setAttribute('id', 'time');
         div_time.innerHTML = message_data["timestamp"];
 
@@ -151,11 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
         li.appendChild(div_media_body);
 
         document.querySelector('#comment-list').append(li);
-        let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-        let current_channel = localStorage.getItem('current_channel');
-        comment_stack[current_channel] -= 10;
-        localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
-        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+        if(!message_data['deleted_message']) {
+            let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+            let current_channel = localStorage.getItem('current_channel');
+            comment_stack[current_channel] -= 10;
+            localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
+            document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+        }
         li.scrollIntoView();
 
     });
@@ -176,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set onsubmit attribute for adding channel
     document.querySelector('#add-channel-form').onsubmit = () => {
         const channel_name = document.querySelector('#channel').value;
-
         var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
         if( !(channel_name in comment_stack) ) {
             comment_stack[channel_name] = 110;
