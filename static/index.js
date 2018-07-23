@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.id = 'submit-switch-channel';
             button.setAttribute('type', 'submit');
             button.setAttribute('value', channel_name);
-            button.setAttribute('onclick', channel_switch);
+            button.onclick = channel_switch;
 
             const li = document.createElement('li');
             li.innerHTML = `# ${channel_name}`;
