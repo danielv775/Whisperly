@@ -25,14 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     var channel_element = channel_to_display, parser = new DOMParser(), doc = parser.parseFromString(channel_element, 'text/xml');
     document.querySelector('#message-view').prepend(doc.querySelector('#channel-title'));
 
-    // Send AJAX POST with username data to FLASK
-    // Keep track of user:channel pairs on server
-    // Send back JSON with proper channel data for that user
-    const request = new XMLHttpRequest();
-    request.open('POST', '/');
-    request.onload = () => {
+    function asynch_load_messages(request) {
+        /*
+        Parse JSON message data response from server. This functionality is used to generate the proper message view
+        when the user refreshes the page, or switches channels.
+        */
         const data = JSON.parse(request.responseText);
-        console.log(data);
         for(var i = 0; i < data.length; i++) {
             const comment = template({'comment': data[i]});
             document.querySelector('#comment-list').innerHTML += comment;
@@ -43,8 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (comment_count > 0) {
             document.querySelector('#comment-list').lastElementChild.scrollIntoView();
         }
-
+        return false;
     }
+
+    // Generate message view for user with data from server
+    const request = new XMLHttpRequest();
+    request.open('POST', '/');
+    request.onload = asynch_load_messages.bind(null, request);
     const data = new FormData();
     data.append('username', username);
     data.append('channel_name', current_channel);
@@ -61,42 +64,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Clear messages from current view when switching to next channel
                 var room_to_leave = localStorage.getItem('current_channel');
                 if(this.value != room_to_leave) {
-                    var switching_channel = this.value;
+                    var current_channel = this.value;
                     var current_user = localStorage.getItem('display_name');
-                    socket.emit('join', switching_channel);
+                    socket.emit('join', current_channel);
                     socket.emit('leave', room_to_leave);
 
-                    localStorage.setItem('current_channel', switching_channel);
+                    localStorage.setItem('current_channel', current_channel);
                     document.querySelector('#comment-list').innerHTML = '';
 
-                    // Send Asynch AJAX request to FLASK to tell server what channel was selected
+                    // Generate message view with data from server for user switching to a new channel
                     const request = new XMLHttpRequest();
                     request.open('POST', '/');
-
-                    // Parse JSON response for unique channel data
-                    // i.e. past 100 messages, where each message has a timestamp, displayname, and text content
-                    // Use JS to render the data into the message view without reloading the page
-                    request.onload = () => {
-                        const data = JSON.parse(request.responseText);
-                        console.log(data);
-                        for(var i = 0; i < data.length; i++) {
-                            const comment = template({'comment': data[i]});
-                            document.querySelector('#comment-list').innerHTML += comment;
-                        }
-                        let comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
-                        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[switching_channel]}%`;
-                        var comment_count = document.querySelector('#comment-list').childElementCount;
-                        if (comment_count > 0) {
-                            document.querySelector('#comment-list').lastElementChild.scrollIntoView();
-                        }
-                        return false;
-                    }
-
+                    request.onload = asynch_load_messages.bind(null, request);
                     const data = new FormData();
                     data.append('channel_name', localStorage.getItem('current_channel'));
                     document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
                     request.send(data);
-
                     return false;
 
                 }
@@ -107,12 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
        document.querySelector('#submit-send-message').onclick = () => {
+           /* Event for any message being sent */
+
            var message_content = document.querySelector('#message-input').value
            var timestamp = new Date();
            timestamp = timestamp.toLocaleString('en-US');
            var user = username;
            var current_channel = localStorage.getItem('current_channel');
            var delete_channel = `command delete ${current_channel}`;
+
+           /* Superuser can delete a channel */
            if( (user == 'superuser') && (message_content == delete_channel) && (current_channel != 'general') )
            {
                socket.emit('join', 'general');
