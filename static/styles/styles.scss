@@ -35,7 +35,7 @@ $font-stack-comment: 'Josefin Sans', sans-serif;
 
 .col-channel-width {
     width: 300px;
-    padding-left: 25px;
+    padding-left: 30px;
 }
 
 .channel-input {
@@ -141,7 +141,9 @@ h5, #time {
     height: 80%;
     padding: 10px 10px 10px 33px;
     .comment-item {
+        margin-right: 25px;
         text-align: left;
+        word-wrap: break-word;
         .comment-user {
             font-size: 131%;
             color: black;
