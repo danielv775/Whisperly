@@ -50,6 +50,16 @@ def send_message(message_data):
         message_data["deleted_message"] = True
     emit("recieve message", message_data, broadcast=True, room=channel)
 
+@socketio.on("delete channel")
+def delete_channel(message_data):
+    channel = message_data["current_channel"]
+    user = message_data["user"]
+    present_channel[user] = "general"
+    del message_data["current_channel"]
+    del channel_list[channel]
+    channel_list["general"].append(message_data)
+    message_data = channel_list["general"]
+    emit("announce channel deletion", message_data, broadcast=True)
 
 @socketio.on("leave")
 def on_leave(room_to_leave):

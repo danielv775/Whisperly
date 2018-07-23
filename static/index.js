@@ -107,16 +107,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
        document.querySelector('#submit-send-message').onclick = () => {
-           let message_content = document.querySelector('#message-input').value
-           let timestamp = new Date();
+           var message_content = document.querySelector('#message-input').value
+           var timestamp = new Date();
            timestamp = timestamp.toLocaleString('en-US');
-           let user = username;
-           let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": localStorage.getItem('current_channel') };
-           console.log(message_data);
-           document.querySelector('#message-input').value = '';
-           socket.emit('send message', message_data);
+           var user = username;
+           var current_channel = localStorage.getItem('current_channel');
+           var delete_channel = `command delete ${current_channel}`;
+           if( (user == 'superuser') && (message_content == delete_channel) && (current_channel != 'general') )
+           {
+               socket.emit('join', 'general');
+               socket.emit('leave', current_channel);
+               user = "mod";
+               message_content = `mod has deleted channel ${current_channel}`;
+               let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
 
-           return false;
+               console.log(message_data);
+               document.querySelector('#message-input').value = '';
+               socket.emit('delete channel', message_data);
+
+               return false;
+
+           }
+           else {
+               if(user == 'superuser') {
+                   user = 'mod';
+               }
+               let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
+               console.log(message_data);
+               document.querySelector('#message-input').value = '';
+               socket.emit('send message', message_data);
+
+               return false;
+           }
        };
 
     });
@@ -124,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // When a message is broadcast to a channel, recieve the message, and add it to the message view
     socket.on('recieve message', message_data => {
         // Create a comment element and add to message view
-        console.log(message_data["deleted_message"]);
 
         const li = document.createElement('li');
         li.setAttribute('class', 'media comment-item');
@@ -162,8 +183,39 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
         }
         li.scrollIntoView();
-
     });
+
+    socket.on('announce channel deletion', message_data => {
+        var deleted_channel = localStorage.getItem('current_channel');
+        localStorage.setItem('current_channel', 'general');
+        document.querySelector('#comment-list').innerHTML = '';
+        document.querySelector('#channel-title').remove();
+
+        var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+        delete comment_stack[deleted_channel];
+        localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
+        document.querySelectorAll('#submit-switch-channel').forEach(button => {
+            if(button.value == deleted_channel) {
+                button.parentElement.remove();
+            }
+        });
+
+        const channel_to_display = template_title({'channel_to_display': localStorage.getItem('current_channel')});
+        var channel_element = channel_to_display, parser = new DOMParser(), doc = parser.parseFromString(channel_element, 'text/xml');
+        document.querySelector('#message-view').prepend(doc.querySelector('#channel-title'));
+
+        var data = message_data;
+        for(var i = 0; i < data.length; i++) {
+            const comment = template({'comment': data[i]});
+            document.querySelector('#comment-list').innerHTML += comment;
+        }
+        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+        var comment_count = document.querySelector('#comment-list').childElementCount;
+        if (comment_count > 0) {
+            document.querySelector('#comment-list').lastElementChild.scrollIntoView();
+        }
+    });
+
 
     // By default, you cannot add a channel
     document.querySelector('#submit-add-channel').disabled = true;
