@@ -27,7 +27,7 @@ def index():
             channel_list[channel] = []
             return jsonify({"success": True})
         # Switching to a different channel
-        if channel in channel_list:
+        elif channel in channel_list:
             # send channel specific data to client i.e. messages, who sent them, and when they were sent
             # send via JSON response and then render with JS
             print(f"Switch to {channel}")
