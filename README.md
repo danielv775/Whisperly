@@ -2,6 +2,9 @@
 
 Web Programming with Python and JavaScript
 
+The website is live at the following URL
+<a href="https://whisperly.herokuapp.com/">https://whisperly.herokuapp.com/</a>
+
 <h1>HTML</h1>
 
 <h2>layout.html</h2>
@@ -74,3 +77,9 @@ for the username "superuser". This feature is also generally useful to have a "c
 a feature like this the only way to cleanup the channels would be to restart the server.
 </p>
 
+<h1>Deployment to Heroku</h1>
+
+<h2>Procfile</h2>
+<p>I chose to deploy my web app to heroku so that it is more accessible. In order to do this, I had to include a
+Procfile telling gunicorn to how to run my Flask app on Heroku. I also had to add gunicorn to my requirements.txt.
+</p>
