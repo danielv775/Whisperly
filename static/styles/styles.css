@@ -38,6 +38,11 @@
     color: #8A93B1;
     background-color: #161C2F; }
 
+.btn:disabled {
+  color: #8A93B1;
+  background-color: #161C2F;
+  opacity: 1.0; }
+
 html, body {
   height: 100%;
   overflow-y: hidden;

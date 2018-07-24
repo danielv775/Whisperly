@@ -58,6 +58,12 @@ $font-stack-comment: 'Josefin Sans', sans-serif;
   }
 }
 
+.btn:disabled {
+  color: $secondary-color;
+  background-color: $primary-color;
+  opacity: 1.0;
+}
+
 html, body {
   height: 100%;
   overflow-y: hidden;
