@@ -107,8 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
            /* Superuser can delete a channel */
            if( (user == 'superuser') && (message_content == delete_channel) && (current_channel != 'general') )
            {
-               //socket.emit('join', 'general');
-               //socket.emit('leave', current_channel);
                user = "mod";
                message_content = `mod has deleted channel ${current_channel}`;
                let message_data = {"message_content": message_content, "timestamp": timestamp, "user":user, "current_channel": current_channel };
@@ -231,14 +229,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const channel_name = document.querySelector('#channel').value;
         var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
         if( !(channel_name in comment_stack) ) {
-            comment_stack[channel_name] = 110;
-            localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
-            // Create channel which is a form->button->li nested element
+
+            socket.emit('create channel', channel_name);
+
+            // Save comment stack padding on all clients
+            socket.on('new channel', new_channel => {
+                var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));
+                comment_stack[new_channel] = 110;
+                localStorage.setItem('comment_stack', JSON.stringify(comment_stack));
+            });
+
+            // Create channel which is a form->button->li nested element,
+            // Assume request is good and add to front-end for quicker response
+            // If request turns out to be bad, remove the added channel UI in onload
             const form = document.createElement('form');
             form.setAttribute('id', 'switch-channel-form');
 
             const button = document.createElement('button');
-            //button.setAttribute('id', 'submit-switch-channel');
             button.id = 'submit-switch-channel';
             button.setAttribute('type', 'submit');
             button.setAttribute('value', channel_name);
@@ -264,10 +271,11 @@ document.addEventListener('DOMContentLoaded', () => {
             request.onload = () => {
                 const data = JSON.parse(request.responseText);
                 if(data.success) {
-                    console.log("Channel name sent to FLASK server");
+                    console.log("Keeping added channel UI clientside");
                 }
                 else {
-                    console.log("Channel data not recieved by FLASK server");
+                    console.log("Server did not process request to add new channel, deleting channel UI");
+                    document.querySelector('#channels').lastElementChild.remove();
                 }
             }
 

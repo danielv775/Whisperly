@@ -14,7 +14,6 @@ present_channel = {"initial":"general"}
 
 @app.route("/", methods=["POST", "GET"])
 def index():
-
     if request.method == "GET":
         # Pass channel list to, and use jinja to display already created channels
         return render_template("index.html", channel_list=channel_list)
@@ -28,7 +27,7 @@ def index():
             channel_list[channel] = []
             return jsonify({"success": True})
         # Switching to a different channel
-        elif channel in channel_list:
+        if channel in channel_list:
             # send channel specific data to client i.e. messages, who sent them, and when they were sent
             # send via JSON response and then render with JS
             print(f"Switch to {channel}")
@@ -37,6 +36,10 @@ def index():
             return jsonify(channel_data)
         else:
             return jsonify({"success": False})
+
+@socketio.on("create channel")
+def create_channel(new_channel):
+    emit("new channel", new_channel, broadcast=True)
 
 @socketio.on("send message")
 def send_message(message_data):
