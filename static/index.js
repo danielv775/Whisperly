@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if(button.value == room_to_leave) {
                     button.parentElement.style.backgroundColor = '#171C2F';
                     button.firstElementChild.style.color = '#8C93B3';
-                    button.parentElement.hover
                 }
             });
 
@@ -221,7 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('join', 'general');
         socket.emit('leave', deleted_channel);
 
-        localStorage.setItem('current_channel', 'general');
         document.querySelector('#comment-list').innerHTML = '';
         document.querySelector('#channel-title').remove();
 
@@ -231,6 +229,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('#submit-switch-channel').forEach(button => {
             if(button.value == deleted_channel) {
                 button.parentElement.remove();
+            }
+            else if(button.value == localStorage.getItem('current_channel')) {
+                button.parentElement.style.backgroundColor = '#171C2F';
+                button.firstElementChild.style.color = '#8C93B3';
+            }
+        });
+        localStorage.setItem('current_channel', 'general');
+        document.querySelectorAll('#submit-switch-channel').forEach(button => {
+            if(button.value == localStorage.getItem('current_channel')) {
+                button.parentElement.style.backgroundColor = '#8C93B3';
+                button.firstElementChild.style.color = '#171C2F';
             }
         });
 
@@ -243,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const comment = template({'comment': data[i]});
             document.querySelector('#comment-list').innerHTML += comment;
         }
-        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[current_channel]}%`;
+        document.querySelector('#comment-list').style.paddingTop = `${comment_stack[localStorage.getItem('current_channel')]}%`;
         var comment_count = document.querySelector('#comment-list').childElementCount;
         if (comment_count > 0) {
             document.querySelector('#comment-list').lastElementChild.scrollIntoView();
