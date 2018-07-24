@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var channel_element = channel_to_display, parser = new DOMParser(), doc = parser.parseFromString(channel_element, 'text/xml');
     document.querySelector('#message-view').prepend(doc.querySelector('#channel-title'));
 
-    function asynch_load_messages(request) {
+    function asynch_load_messages(request, refresh) {
         /*
         Parse JSON message data response from server. This functionality is used to generate the proper message view
         when the user refreshes the page, or switches channels.
@@ -41,6 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (comment_count > 0) {
             document.querySelector('#comment-list').lastElementChild.scrollIntoView();
         }
+
+        if(refresh) {
+            document.querySelectorAll('#submit-switch-channel').forEach(button => {
+                if(button.value == current_channel) {
+                    button.parentElement.style.backgroundColor = '#8A93B1';
+                    button.firstElementChild.style.color = '#161C2F';
+                }
+            });
+        }
+
         return false;
     }
 
@@ -55,6 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if(this.value != room_to_leave) {
             var current_channel = this.value;
             var current_user = localStorage.getItem('display_name');
+
+            document.querySelectorAll('#submit-switch-channel').forEach(button => {
+                if(button.value == current_channel) {
+                    button.parentElement.style.backgroundColor = '#8A93B1';
+                    button.firstElementChild.style.color = '#161C2F';
+                }
+                else if(button.value == room_to_leave) {
+                    button.parentElement.style.backgroundColor = '#161C2F';
+                    button.firstElementChild.style.color = '#8A93B1';
+                }
+            });
+
             socket.emit('join', current_channel);
             socket.emit('leave', room_to_leave);
 
@@ -64,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Generate message view with data from server for user switching to a new channel
             const request = new XMLHttpRequest();
             request.open('POST', '/');
-            request.onload = asynch_load_messages.bind(null, request);
+            request.onload = asynch_load_messages.bind(null, request, refresh=false);
             const data = new FormData();
             data.append('channel_name', localStorage.getItem('current_channel'));
             document.querySelector('#channel-title').innerHTML = localStorage.getItem('current_channel');
@@ -94,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Generate message view for user with data from server
     const request = new XMLHttpRequest();
     request.open('POST', '/');
-    request.onload = asynch_load_messages.bind(null, request);
+    request.onload = asynch_load_messages.bind(null, request, refresh=true);
     const data = new FormData();
     data.append('username', username);
     data.append('channel_name', current_channel);

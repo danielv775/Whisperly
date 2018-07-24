@@ -84,9 +84,9 @@ ul {
   font-size: 120%; }
 
 #switch-channel-form:hover {
-  background-color: #8A93B1; }
+  background-color: #8A93B1 !important; }
   #switch-channel-form:hover #channel-option {
-    color: #161C2F; }
+    color: #161C2F !important; }
 
 #submit-switch-channel {
   background: none;
