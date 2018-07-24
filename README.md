@@ -43,7 +43,7 @@ to more accuratley layout the comments view as a new comment is entered.
 </p>
 
 <h1>Python: Server</h1>
-</h2>application.py</h2>
+<h2>application.py</h2>
 <p>application.py contains all of the server side code for my single page app. It has one route function, index, and
 5 socketio listeners that respond to signals sent via emit from the JS client. Also, it has global variables to store data
 more permanently. The first global variable is a dictionary where each key is a channel name, and each value is a list of
