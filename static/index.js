@@ -77,6 +77,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function prevent_blank_text_entry(input_id, button_id) {
+        /* Disable button by default, only enable if character entered in field */
+        document.querySelector(button_id).disabled = true;
+
+        document.querySelector(input_id).onkeyup = () => {
+            if(document.querySelector(input_id).value.length > 0) {
+                document.querySelector(button_id).disabled = false;
+            }
+            else {
+                document.querySelector(button_id).disabled = true;
+            }
+        };
+    }
+
     // Generate message view for user with data from server
     const request = new XMLHttpRequest();
     request.open('POST', '/');
@@ -94,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.onclick = channel_switch;
         });
 
+       prevent_blank_text_entry('#message-input', '#submit-send-message');
        document.querySelector('#submit-send-message').onclick = () => {
            /* Event for any message being sent */
 
@@ -114,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
                console.log(message_data);
                document.querySelector('#message-input').value = '';
                socket.emit('delete channel', message_data);
+               document.querySelector('#submit-send-message').disabled = true;
 
                return false;
 
@@ -126,6 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
                console.log(message_data);
                document.querySelector('#message-input').value = '';
                socket.emit('send message', message_data);
+               document.querySelector('#submit-send-message').disabled = true;
 
                return false;
            }
@@ -210,21 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-    // By default, you cannot add a channel
-    document.querySelector('#submit-add-channel').disabled = true;
-
-    // Enable button only if there is text in the field
-    document.querySelector('#channel').onkeyup = () => {
-        if(document.querySelector('#channel').value.length > 0) {
-            document.querySelector('#submit-add-channel').disabled = false;
-        }
-        else {
-            document.querySelector('#submit-add-channel').disabled = true;
-        }
-    };
-
     // Set onsubmit attribute for adding channel
+    prevent_blank_text_entry('#channel', '#submit-add-channel');
     document.querySelector('#add-channel-form').onsubmit = () => {
         const channel_name = document.querySelector('#channel').value;
         var comment_stack = JSON.parse(localStorage.getItem('comment_stack'));

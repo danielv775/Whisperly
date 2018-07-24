@@ -70,7 +70,6 @@ def on_leave(room_to_leave):
     leave_room(room_to_leave)
     emit("leave channel ack", room=room_to_leave)
 
-
 @socketio.on("join")
 def on_join(room_to_join):
     print("joining room")
