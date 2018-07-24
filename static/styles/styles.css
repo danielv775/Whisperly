@@ -1,4 +1,3 @@
-/*$font-stack: 'Carter One', sans-serif;*/
 .app-area {
   height: 100%; }
 
@@ -6,7 +5,7 @@
   background-color: white; }
 
 .color-channel-test {
-  background-color: #161C2F; }
+  background-color: #171C2F; }
 
 .comment-media:hover {
   background-color: #F9F9F9; }
@@ -25,8 +24,8 @@
 .channel-input {
   width: 90%; }
   .channel-input .add-button {
-    color: #8A93B1;
-    background-color: #161C2F; }
+    color: #8C93B3;
+    background-color: #171C2F; }
 
 .message-input {
   width: 95%;
@@ -35,12 +34,12 @@
   margin-right: auto;
   margin-bottom: 15px; }
   .message-input .add-button {
-    color: #8A93B1;
-    background-color: #161C2F; }
+    color: #8C93B3;
+    background-color: #171C2F; }
 
 .btn:disabled {
-  color: #8A93B1;
-  background-color: #161C2F;
+  color: #8C93B3;
+  background-color: #171C2F;
   opacity: 1.0; }
 
 html, body {
@@ -49,22 +48,24 @@ html, body {
   overflow-x: hidden; }
 
 #user {
-  color: #8A93B1;
+  color: #8C93B3;
   margin-top: 20px;
   margin-left: 3px;
-  font-family: "Josefin Sans", sans-serif; }
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 250%; }
 
 #channel-heading {
-  color: #8A93B1;
-  font-family: "Josefin Sans", sans-serif; }
+  color: #8C93B3;
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 200%; }
 
 #channel-option {
   font-family: "Josefin Sans", sans-serif;
   font-size: 150%; }
 
 .add-button:hover {
-  color: #161C2F;
-  background-color: #8A93B1; }
+  color: #171C2F;
+  background-color: #8C93B3; }
 
 ul {
   list-style-type: none;
@@ -72,7 +73,7 @@ ul {
   margin-left: 0;
   padding-left: 0; }
   ul li {
-    color: #8A93B1;
+    color: #8C93B3;
     font-size: 120%; }
 
 #plus {
@@ -84,9 +85,9 @@ ul {
   font-size: 120%; }
 
 #switch-channel-form:hover {
-  background-color: #8A93B1 !important; }
+  background-color: #8C93B3 !important; }
   #switch-channel-form:hover #channel-option {
-    color: #161C2F !important; }
+    color: #171C2F !important; }
 
 #submit-switch-channel {
   background: none;
@@ -127,11 +128,5 @@ h5, #time {
       font-size: 79%;
       color: black;
       font-family: "Josefin Sans", sans-serif; }
-
-/*
-#comment-list {
-  padding-top: 100%;
-}
-*/
 
 /*# sourceMappingURL=styles.css.map */

@@ -45,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if(refresh) {
             document.querySelectorAll('#submit-switch-channel').forEach(button => {
                 if(button.value == current_channel) {
-                    button.parentElement.style.backgroundColor = '#8A93B1';
-                    button.firstElementChild.style.color = '#161C2F';
+                    button.parentElement.style.backgroundColor = '#8C93B3';
+                    button.firstElementChild.style.color = '#171C2F';
                 }
             });
         }
@@ -68,12 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             document.querySelectorAll('#submit-switch-channel').forEach(button => {
                 if(button.value == current_channel) {
-                    button.parentElement.style.backgroundColor = '#8A93B1';
-                    button.firstElementChild.style.color = '#161C2F';
+                    button.parentElement.style.backgroundColor = '#8C93B3';
+                    button.firstElementChild.style.color = '#171C2F';
                 }
                 else if(button.value == room_to_leave) {
-                    button.parentElement.style.backgroundColor = '#161C2F';
-                    button.firstElementChild.style.color = '#8A93B1';
+                    button.parentElement.style.backgroundColor = '#171C2F';
+                    button.firstElementChild.style.color = '#8C93B3';
+                    button.parentElement.hover
                 }
             });
 

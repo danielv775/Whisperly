@@ -1,12 +1,8 @@
 
-$primary-color: #161C2F;
-$secondary-color: #8A93B1;
-$crimson: #c90016;
-$orange: #ff8800;
-/*$font-stack: 'Carter One', sans-serif;*/
+$primary-color: #171C2F;
+$secondary-color: #8C93B3;
 $font-stack: 'Josefin Sans', sans-serif;
 $font-stack-comment: 'Josefin Sans', sans-serif;
-
 
 .app-area {
   height: 100%;
@@ -75,11 +71,13 @@ html, body {
   margin-top: 20px;
   margin-left: 3px;
   font-family: $font-stack;
+  font-size: 250%;
 }
 
 #channel-heading {
   color: $secondary-color;
   font-family: $font-stack;
+  font-size: 200%;
 }
 
 #channel-option {
@@ -167,9 +165,3 @@ h5, #time {
         }
     }
 }
-
-/*
-#comment-list {
-  padding-top: 100%;
-}
-*/
